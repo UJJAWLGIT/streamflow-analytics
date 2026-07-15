@@ -1,0 +1,80 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "streamflow-analytics"
+version = "2.0.0"
+description = "Production-grade SaaS subscription cancel-flow analytics platform"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Ujjawl Kumar", email = "info.ujjawlkr094@gmail.com"}]
+keywords = ["data-engineering", "pyspark", "delta-lake", "dbt", "mlflow", "airflow"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+]
+requires-python = ">=3.11"
+dependencies = [
+    "pyspark>=3.5.0",
+    "pandas>=2.1.0",
+    "numpy>=1.26.0",
+    "pyarrow>=14.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/ujjawlkumar/streamflow-analytics"
+Repository = "https://github.com/ujjawlkumar/streamflow-analytics"
+Issues = "https://github.com/ujjawlkumar/streamflow-analytics/issues"
+
+[tool.black]
+line-length = 120
+target-version = ["py311"]
+include = '\.pyi?$'
+extend-exclude = '''/(dbt/target|.venv|dist|build)/'''
+
+[tool.isort]
+profile = "black"
+line_length = 120
+skip_glob = ["dbt/**", ".venv/**"]
+
+[tool.flake8]
+max-line-length = 120
+ignore = ["E501", "W503", "E203"]
+exclude = [".venv", "build", "dist", "dbt/target"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+exclude = ["dbt/", ".venv/"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--tb=short",
+    "--strict-markers",
+    "-v",
+]
+markers = [
+    "unit: Unit tests (no Spark required)",
+    "integration: Integration tests (requires PySpark)",
+    "e2e: End-to-end pipeline tests",
+    "slow: Slow tests (>30s)",
+]
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["*/tests/*", "*/__init__.py", "*/conftest.py"]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+skip_covered = false
