@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.env
+*.egg-info/
+dist/
+build/
+
+# Spark
+derby.log
+metastore_db/
+spark-warehouse/
+*.parquet
+*.orc
+*.avro
+
+# Delta Lake
+_delta_log/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+
+# dbt
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+
+# Testing
+.pytest_cache/
+htmlcov/
+.coverage
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data
+data/raw/
+data/output/
+
+# MLflow
+mlruns/
+mlartifacts/
