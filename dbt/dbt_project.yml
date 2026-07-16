@@ -1,0 +1,76 @@
+name: streamflow_analytics
+version: "2.0.0"
+config-version: 2
+
+profile: streamflow
+
+model-paths:   ["models"]
+test-paths:    ["tests"]
+macro-paths:   ["macros"]
+seed-paths:    ["seeds"]
+snapshot-paths:["snapshots"]
+analysis-paths:["analyses"]
+
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+require-dbt-version: [">=1.7.0", "<2.0.0"]
+
+# =============================================================================
+# Model configurations by layer
+# =============================================================================
+
+models:
+  streamflow_analytics:
+
+    # Bronze: raw source data — no transformations
+    bronze:
+      +materialized:  incremental
+      +file_format:   parquet
+      +tags:          ["bronze", "raw"]
+      +meta:
+        tier: bronze
+        layer: ingestion
+
+    # Silver: curated, typed, deduplicated
+    silver:
+      +materialized:  incremental
+      +incremental_strategy: merge
+      +file_format:   delta
+      +tags:          ["silver", "curated"]
+      +meta:
+        tier: silver
+        layer: curated
+
+    # Gold: governed 3★ reporting tables
+    gold:
+      +materialized:  incremental
+      +incremental_strategy: merge
+      +file_format:   delta
+      +tags:          ["gold", "governed", "3star"]
+      +meta:
+        tier: gold
+        layer: serving
+        slo_freshness_hours: 8
+        slo_query_ms: 500
+
+# =============================================================================
+# Variable defaults
+# =============================================================================
+
+vars:
+  start_date:  "{{ run_started_at.strftime('%Y-%m-%d') }}"
+  end_date:    "{{ run_started_at.strftime('%Y-%m-%d') }}"
+  environment: "{{ env_var('STREAMFLOW_ENV', 'local') }}"
+
+# =============================================================================
+# Source freshness expectations
+# =============================================================================
+
+sources:
+  streamflow_analytics:
+    schema: bronze
+    freshness:
+      warn_after:  {count: 6,  period: hour}
+      error_after: {count: 10, period: hour}
+    loaded_at_field: processed_timestamp
