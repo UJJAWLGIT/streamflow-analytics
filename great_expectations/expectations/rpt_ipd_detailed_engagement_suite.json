@@ -1,0 +1,86 @@
+	
+expectation_suite_name	"rpt_ipd_detailed_engagement"
+meta	
+owner	"ujjawl.kumar"
+tier	"3-star"
+table	"gold.rpt_ipd_detailed_engagement"
+expectations	
+0	
+expectation_type	"expect_table_row_count_to_be_between"
+kwargs	
+min_value	0
+meta	
+notes	"0 rows valid — not all initiations have IPD exposure"
+1	
+expectation_type	"expect_column_values_to_not_be_null"
+kwargs	
+column	"company_id"
+meta	
+severity	"CRITICAL"
+2	
+expectation_type	"expect_column_values_to_not_be_null"
+kwargs	
+column	"properties_ui_access_point"
+meta	
+severity	"CRITICAL"
+3	
+expectation_type	"expect_column_values_to_not_be_null"
+kwargs	
+column	"properties_custom_fp_offer_id"
+meta	
+severity	"CRITICAL"
+4	
+expectation_type	"expect_column_values_to_not_be_null"
+kwargs	
+column	"viewed_dic_component"
+meta	
+severity	"CRITICAL"
+notes	"Must be 0 not NULL when no DIC — COALESCE in Step 2"
+5	
+expectation_type	"expect_column_values_to_not_be_null"
+kwargs	
+column	"number_of_data_points_shown"
+meta	
+severity	"CRITICAL"
+notes	"Must be 0 not NULL — COALESCE in Step 2"
+6	
+expectation_type	"expect_compound_columns_to_be_unique"
+kwargs	
+column_list	
+0	"company_id"
+1	"initiation_rank"
+2	"initiation_timestamp"
+3	"properties_ui_access_point"
+4	"properties_custom_fp_offer_id"
+meta	
+severity	"CRITICAL"
+notes	"Uniqueness = 100% — SELECT DISTINCT in Step 2"
+7	
+expectation_type	"expect_column_values_to_be_in_set"
+kwargs	
+column	"ipd_type"
+value_set	
+0	"CS IPD"
+1	"Discount IPD"
+2	"Upgrade IPD"
+3	"Downgrade IPD"
+4	"Keep my Plan IPD"
+5	"Unknown"
+meta	
+severity	"MAJOR"
+8	
+expectation_type	"expect_column_values_to_be_between"
+kwargs	
+column	"viewed_ipd"
+min_value	0
+max_value	1
+meta	
+severity	"MAJOR"
+9	
+expectation_type	"expect_column_values_to_be_between"
+kwargs	
+column	"clicked_ipd"
+min_value	0
+max_value	1
+meta	
+severity	"MAJOR"
