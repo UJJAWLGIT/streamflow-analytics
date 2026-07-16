@@ -1,0 +1,97 @@
+# =============================================================================
+# Schema Contract: gold.rpt_cancel_flow_final_metrics
+# =============================================================================
+# Tier:        3-star Governed (IEDM-compatible)
+# Grain:       One row per cancel initiation
+# Partition:   (product, initiation_year, initiation_month)
+# Format:      Delta Lake (ACID, time-travel enabled)
+# SLO Query:   P99 <= 500ms
+# Freshness:   <= 6 hours daily
+# =============================================================================
+
+entity: rpt_cancel_flow_final_metrics
+schema: gold
+format: delta
+partition_keys: [product, initiation_year, initiation_month]
+primary_key: [company_id, initiation_rank, cancel_flow_start_timestamp]
+is_pii_restricted: false
+
+description: >
+  Final consolidated analytics reporting table for the SaaS subscription cancel flow
+  pipeline. One row per cancellation initiation per company across all products.
+  Enriched with company profile, billing context, save outcomes, IPD engagement flags,
+  DIC exposure, and 31-day / 92-day bake + retention indicators.
+  No IXP experiment filter — covers all cancel-flow initiations.
+
+properties:
+  company_id:
+    type: long
+    nullable: false
+    pii: Non PII
+    description: Unique company identifier (primary business key).
+
+  realm_id:
+    type: string
+    nullable: true
+    pii: Non PII
+    description: String cast of company_id for ECS join compatibility.
+
+  product:
+    type: string
+    nullable: true
+    pii: Non PII
+    description: "Subscription product. Values: SAAS_CORE, SAAS_PLUS, SAAS_ADVANCED, SAAS_PAYROLL, SAAS_LIVE"
+    example: "SAAS_CORE"
+
+  cancel_flow_start_timestamp:
+    type: timestamp
+    nullable: false
+    pii: Non PII
+    description: Timestamp when the user initiated the cancellation flow (ECS workflow:started event).
+
+  initiation_rank:
+    type: integer
+    nullable: false
+    pii: Non PII
+    description: ROW_NUMBER per (company_id, sku) ordered by initiation_timestamp. 1 = first ever attempt.
+
+  cancel_confirmed:
+    type: string
+    nullable: true
+    pii: Non PII
+    description: "Y = cancellation completed. N = not completed. Covers all three confirmation taxonomies."
+    values: [Y, N]
+
+  save_attribution:
+    type: string
+    nullable: true
+    pii: Non PII
+    description: "Priority-ordered save outcome. CS Save > Cancelled > Upgrade Save > Downgrade Save > Discount Save > Abandoned"
+    values: [CS Save, Cancelled, Upgrade Save, Downgrade Save, Discount Save, Abandoned]
+
+  baked_31d:
+    type: integer
+    nullable: true
+    pii: Non PII
+    description: "1 if 31-day retention outcome is fully observable (CURRENT_DATE >= initiation_date + 31). Filter to baked_31d=1 before using retained_31d."
+    values: [0, 1]
+
+  retained_31d:
+    type: integer
+    nullable: true
+    pii: Non PII
+    description: "1 if company was an active open subscriber 31 days after initiation_date. Reliable only when baked_31d=1."
+    values: [0, 1]
+
+  viewed_dic:
+    type: integer
+    nullable: true
+    pii: Non PII
+    description: "1 if DIC (Data-Informed Cancellation / usage-highlights-widget) was shown during the cancel flow window."
+    values: [0, 1]
+
+  dwh_create_date:
+    type: timestamp
+    nullable: false
+    pii: Non PII
+    description: Audit timestamp — when the record was written by the pipeline.
