@@ -1,0 +1,38 @@
+name: cancel_flow_daily_checkpoint
+config_version: 1.0
+class_name: Checkpoint
+run_name_template: "%Y%m%d-%H%M%S-cancel-flow"
+validations:
+  - batch_request:
+      datasource_name: streamflow_spark_datasource
+      data_connector_name: default_inferred_data_connector_name
+      data_asset_name: gold.rpt_cancel_flow_final_metrics
+      data_connector_query:
+        index: -1
+    expectation_suite_name: rpt_cancel_flow_final_metrics
+    action_list:
+      - name: store_validation_result
+        action:
+          class_name: StoreValidationResultAction
+      - name: update_data_docs
+        action:
+          class_name: UpdateDataDocsAction
+      - name: send_slack_notification_on_failure
+        action:
+          class_name: SlackNotificationAction
+          slack_webhook: ${SLACK_WEBHOOK_URL}
+          notify_on: failure
+          renderer:
+            module_name: great_expectations.render.renderer.slack_renderer
+            class_name: SlackRenderer
+  - batch_request:
+      datasource_name: streamflow_spark_datasource
+      data_connector_name: default_inferred_data_connector_name
+      data_asset_name: gold.rpt_ipd_detailed_engagement
+      data_connector_query:
+        index: -1
+    expectation_suite_name: rpt_ipd_detailed_engagement
+    action_list:
+      - name: store_validation_result
+        action:
+          class_name: StoreValidationResultAction
