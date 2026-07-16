@@ -1,0 +1,73 @@
+# =============================================================================
+# Schema Contract: gold.rpt_ipd_detailed_engagement
+# =============================================================================
+# Tier:        3-star Governed (IEDM-compatible)
+# Grain:       One row per IPD offer engagement per cancel initiation (0-N per Step 4 row)
+# Unique Key:  (company_id, initiation_rank, initiation_timestamp, access_point, offer_id)
+# Partition:   (product, initiation_year, initiation_month)
+# Format:      Delta Lake
+# DQ:          viewed_dic_component and number_of_data_points_shown are NEVER NULL (COALESCE to 0)
+# =============================================================================
+
+entity: rpt_ipd_detailed_engagement
+schema: gold
+format: delta
+partition_keys: [product, initiation_year, initiation_month]
+primary_key: [company_id, initiation_rank, initiation_timestamp, properties_ui_access_point, properties_custom_fp_offer_id]
+
+description: >
+  Detailed In-Product Dialog (IPD) and Data-Informed Cancellation (DIC) engagement
+  reporting table. Offer-grain detail: 0, 1, or N rows per cancel initiation.
+  Join to rpt_cancel_flow_final_metrics on (company_id, initiation_rank,
+  initiation_timestamp = cancel_flow_start_timestamp).
+
+properties:
+  company_id:
+    type: long
+    nullable: false
+    pii: Non PII
+
+  initiation_rank:
+    type: integer
+    nullable: false
+    pii: Non PII
+    description: Parent cancel initiation rank — join key to Step 4.
+
+  initiation_timestamp:
+    type: timestamp
+    nullable: false
+    pii: Non PII
+    description: Parent cancel initiation timestamp (join key to cancel_flow_start_timestamp in Step 4).
+
+  ipd_type:
+    type: string
+    nullable: true
+    pii: Non PII
+    description: "Derived dialog type from campaign offer attributes."
+    values: [CS IPD, Discount IPD, Upgrade IPD, Downgrade IPD, Keep my Plan IPD, Unknown]
+
+  viewed_ipd:
+    type: integer
+    nullable: true
+    pii: Non PII
+    values: [0, 1]
+
+  clicked_ipd:
+    type: integer
+    nullable: true
+    pii: Non PII
+    values: [0, 1]
+
+  viewed_dic_component:
+    type: integer
+    nullable: false
+    pii: Non PII
+    description: "0 when no DIC shown (COALESCE guarantees non-null). 1 when usage-highlights-widget was shown."
+    values: [0, 1]
+
+  number_of_data_points_shown:
+    type: integer
+    nullable: false
+    pii: Non PII
+    description: "Count of personalized usage data points in DIC. 0 when no DIC (COALESCE guarantees non-null)."
+    example: 0
