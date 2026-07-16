@@ -1,0 +1,135 @@
+	
+expectation_suite_name	"rpt_cancel_flow_final_metrics"
+data_asset_type	"Dataset"
+meta	
+great_expectations_version	"0.17.x"
+owner	"ujjawl.kumar"
+tier	"3-star"
+table	"gold.rpt_cancel_flow_final_metrics"
+slo_pass_rate	1.0JS:1
+expectations	
+0	
+expectation_type	"expect_table_row_count_to_be_between"
+kwargs	
+min_value	1000000
+meta	
+severity	"CRITICAL"
+notes	"Pipeline should produce at least 1M rows"
+1	
+expectation_type	"expect_column_values_to_not_be_null"
+kwargs	
+column	"company_id"
+meta	
+severity	"CRITICAL"
+2	
+expectation_type	"expect_column_values_to_not_be_null"
+kwargs	
+column	"cancel_flow_start_timestamp"
+meta	
+severity	"CRITICAL"
+3	
+expectation_type	"expect_column_values_to_not_be_null"
+kwargs	
+column	"initiation_rank"
+meta	
+severity	"CRITICAL"
+4	
+expectation_type	"expect_column_values_to_not_be_null"
+kwargs	
+column	"dwh_create_date"
+meta	
+severity	"CRITICAL"
+5	
+expectation_type	"expect_compound_columns_to_be_unique"
+kwargs	
+column_list	
+0	"company_id"
+1	"initiation_rank"
+2	"cancel_flow_start_timestamp"
+meta	
+severity	"CRITICAL"
+notes	"Primary key uniqueness — target 1.0 (100%)"
+6	
+expectation_type	"expect_column_values_to_be_in_set"
+kwargs	
+column	"cancel_confirmed"
+value_set	
+0	"Y"
+1	"N"
+meta	
+severity	"MAJOR"
+7	
+expectation_type	"expect_column_values_to_be_in_set"
+kwargs	
+column	"save_attribution"
+value_set	
+0	"CS Save"
+1	"Cancelled"
+2	"Upgrade Save"
+3	"Downgrade Save"
+4	"Discount Save"
+5	"Abandoned"
+meta	
+severity	"MAJOR"
+8	
+expectation_type	"expect_column_values_to_be_in_set"
+kwargs	
+column	"saved_by_customer_support"
+value_set	
+0	"Y"
+1	"N"
+meta	
+severity	"MAJOR"
+9	
+expectation_type	"expect_column_values_to_be_between"
+kwargs	
+column	"retained_31d"
+min_value	0
+max_value	1
+meta	
+severity	"MAJOR"
+10	
+expectation_type	"expect_column_values_to_be_between"
+kwargs	
+column	"retained_92d"
+min_value	0
+max_value	1
+meta	
+severity	"MAJOR"
+11	
+expectation_type	"expect_column_values_to_be_between"
+kwargs	
+column	"baked_31d"
+min_value	0
+max_value	1
+meta	
+severity	"MAJOR"
+12	
+expectation_type	"expect_column_values_to_be_in_set"
+kwargs	
+column	"product"
+value_set	
+0	"SAAS_CORE"
+1	"SAAS_PLUS"
+2	"SAAS_ADVANCED"
+3	"SAAS_PAYROLL"
+4	"SAAS_LIVE"
+meta	
+severity	"MINOR"
+13	
+expectation_type	"expect_column_values_to_be_in_set"
+kwargs	
+column	"billing_frequency"
+value_set	
+0	"monthly"
+1	"annual"
+meta	
+severity	"MINOR"
+14	
+expectation_type	"expect_column_proportion_of_unique_values_to_be_between"
+kwargs	
+column	"company_id"
+min_value	0.01
+meta	
+severity	"MINOR"
+notes	"Multiple initiations per company expected"
