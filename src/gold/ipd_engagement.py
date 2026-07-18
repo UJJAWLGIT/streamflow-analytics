@@ -36,10 +36,10 @@ CANCEL_FLOW_ACCESS_POINTS = [
     "AccountSettingsCancel",
     "MobileAppBillingCancel",
     # Legacy access points
-    "SBSEGQBOFCAppBillingCancel",
-    "SBSEGQBOFCAppBillingCancelTalktoexpert",
-    "SBSEGQBOATAppAccountsettings",
-    "SBSEGQBOHelloboxAppBillingCancelSupport",
+    "CancelFlowBillingPage",
+    "CancelFlowTalkToExpert",
+    "AccountSettingsCancel",
+    "MobileAppCancelSupport",
 ]
 
 
