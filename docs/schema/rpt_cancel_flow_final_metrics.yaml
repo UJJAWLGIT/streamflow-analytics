@@ -1,7 +1,7 @@
 # =============================================================================
 # Schema Contract: gold.rpt_cancel_flow_final_metrics
 # =============================================================================
-# Tier:        3-star Governed (IEDM-compatible)
+# Tier:        3-star Governed (Schema Registry compatible)
 # Grain:       One row per cancel initiation
 # Partition:   (product, initiation_year, initiation_month)
 # Format:      Delta Lake (ACID, time-travel enabled)
