@@ -120,7 +120,7 @@ clickstream_events (100M+/day)
                         │
      ┌─────────────────────────────────────────────────┐
      │  STEP 1: Cancel Initiations (Silver)            │
-     │  • All products (no QBO-only filter)            │
+     │  • All products (no single-product filter)           │
      │  • Dual confirmation taxonomy (new + legacy)    │
      │  • Window functions: initiation_rank, lead()    │
      │  • Upgrade / downgrade signals                  │
