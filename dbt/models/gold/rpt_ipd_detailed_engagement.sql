@@ -8,7 +8,7 @@
     tags = ['gold', 'governed', '3star', 'daily'],
     meta = {
       'owner': 'ujjawl.kumar', 'tier': '3-star', 'step': 2,
-      'slo_query_ms': 500, 'iedm_entity': 'rpt_ipd_detailed_engagement'
+      'slo_query_ms': 500, 'schema_registry_entity': 'rpt_ipd_detailed_engagement'
     }
   )
 }}
