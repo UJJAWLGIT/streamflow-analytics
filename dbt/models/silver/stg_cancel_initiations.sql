@@ -14,7 +14,7 @@
   silver.stg_cancel_initiations — Step 1
   =======================================
   Cancel initiation grain: one row per (company, sku, initiation_timestamp).
-  "ALL products — no single-product filter"
+  "ALL products — no single-product or experiment filter"
   Captures all three confirmation taxonomies:
     1. cancel_success       (new, deployed 2024-05-07)
     2. yes_cancel           (legacy single-screen)
