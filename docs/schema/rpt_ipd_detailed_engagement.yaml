@@ -1,7 +1,7 @@
 # =============================================================================
 # Schema Contract: gold.rpt_ipd_detailed_engagement
 # =============================================================================
-# Tier:        3-star Governed (IEDM-compatible)
+# Tier:        3-star Governed (Schema Registry compatible)
 # Grain:       One row per IPD offer engagement per cancel initiation (0-N per Step 4 row)
 # Unique Key:  (company_id, initiation_rank, initiation_timestamp, access_point, offer_id)
 # Partition:   (product, initiation_year, initiation_month)
