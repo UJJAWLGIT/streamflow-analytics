@@ -14,7 +14,7 @@ Priority waterfall:
 Sources:
   - stg_cancel_initiations     (Step 1) — upgrade/downgrade already computed
   - rpt_ipd_detailed_engagement (Step 2) — discount IPD offer IDs
-  - qboadv_reactive_saves       — CS save data (7-day window)
+  - cs_reactive_saves_tb   — CS agent save data (7-day window)
   - company_offer_history        — discount purchase validation
 
 Partition: (product, initiation_year, initiation_month)
